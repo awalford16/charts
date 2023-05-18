@@ -1,0 +1,31 @@
+vault:
+  enabled: false
+  engine: dev
+  version: v1
+  createTokenSecret: true  # Create secret to store vault token information
+
+  secrets: {}
+
+azureKeyVault:
+  enabled: true
+  name: mykeyvault
+  authType: ServicePrincipal  # ManagedIdentity or ServicePrincipal
+
+  spSecret:
+    create: true  # Create secret that stores Service Principal details
+    
+    # Only set these values if using a custom secret
+    # usernameKey: ClientID
+    # secretKey: ClientSecret
+
+  secrets: {}
+
+# Whether to install ExternalSecrets onto the cluster 
+installDependencies: false
+
+secretStoreType: ClusterSecretStore  # SecretStore or ClusterSecretStore
+secretRefreshInterval: 1h
+
+external-secrets:
+  # Recommended to install CRDs separately from https://raw.githubusercontent.com/external-secrets/external-secrets/main/deploy/crds/bundle.yaml
+  installCRDs: false

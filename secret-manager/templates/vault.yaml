@@ -1,0 +1,28 @@
+{{- if and .Values.vault.enabled .Values.vault.createTokenSecret }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-token
+  namespace: {{ .Release.Namespace }}
+stringData:
+  token: {{ required "Valid Vault token must be provided" .Values.vault.token }}
+{{- end }}
+{{- if .Values.vault.enabled }}
+---
+apiVersion: external-secrets.io/v1beta1
+kind: {{ .Values.secretStoreType }}
+metadata:
+  name: vault
+  namespace: {{ .Release.Namespace }}
+spec:
+  provider:
+    vault:
+      server: {{ required "Please provide a valid Vault URL" .Values.vault.url }}
+      path: {{ .Values.vault.engine }}
+      version: {{ .Values.vault.version }}
+      auth:
+        tokenSecretRef:
+          name: vault-token
+          key: token
+{{- end }}

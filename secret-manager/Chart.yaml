@@ -1,0 +1,10 @@
+apiVersion: v2
+name: secret-manager
+description: A Helm chart to deploy ExternalSecrets + resources
+type: application
+version: 0.0.1
+dependencies:
+  - name: external-secrets
+    repository: https://charts.external-secrets.io
+    version: 0.8.1
+    condition: installDependencies

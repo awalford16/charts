@@ -1,0 +1,40 @@
+{{- if and .Values.azureKeyVault.enabled .Values.azureKeyVault.spSecret.create }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ default "azure-sp" .Values.azureKeyVault.spSecret.name }}
+  namespace: {{ .Release.Namespace }}
+stringData:
+  ClientID: {{ required "azureKeyVault.clientID must be provided" .Values.azureKeyVault.clientID }}
+  ClientSecret: {{ required "azureKeyVault.clientSecret must be provided" .Values.azureKeyVault.clientSecret }}
+{{- end }}
+{{- if .Values.azureKeyVault.enabled }}
+---
+apiVersion: external-secrets.io/v1beta1
+kind: {{ .Values.secretStoreType }}
+metadata:
+  name: azure-key-vault
+spec:
+  provider:
+    azurekv:
+      # URL of your vault instance, see: https://docs.microsoft.com/en-us/azure/key-vault/general/about-keys-secrets-certificates
+      vaultUrl: "https://{{ .Values.azureKeyVault.name }}.vault.azure.net"
+      {{- if eq .Values.azureKeyVault.authType "ManagedIdentity" }}
+      authType: ManagedIdentity
+      identityID: {{ .Values.azureKeyVault.identityID }}
+      {{- else }}
+      tenantId: {{ .Values.azureKeyVault.tenantID }}
+      authSecretRef:
+        # points to the secret that contains
+        # the azure service principal credentials
+        clientId:
+          name: {{ default "azure-sp" .Values.azureKeyVault.spSecret.name }}
+          namespace: {{ default .Release.Namespace .Values.azureKeyVault.spSecret.namespace }}
+          key: {{ default "ClientID" .Values.azureKeyVault.spSecret.usernameKey }}
+        clientSecret:
+          name: {{ default "azure-sp" .Values.azureKeyVault.spSecretName }}
+          namespace: {{ default .Release.Namespace .Values.azureKeyVault.spSecret.namespace }}
+          key: {{ default "ClientSecret" .Values.azureKeyVault.spSecret.secretKey }}
+      {{- end }}
+{{- end }}
