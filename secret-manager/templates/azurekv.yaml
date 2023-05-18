@@ -33,7 +33,7 @@ spec:
           namespace: {{ default .Release.Namespace .Values.azureKeyVault.spSecret.namespace }}
           key: {{ default "ClientID" .Values.azureKeyVault.spSecret.usernameKey }}
         clientSecret:
-          name: {{ default "azure-sp" .Values.azureKeyVault.spSecretName }}
+          name: {{ default "azure-sp" .Values.azureKeyVault.spSecret.name }}
           namespace: {{ default .Release.Namespace .Values.azureKeyVault.spSecret.namespace }}
           key: {{ default "ClientSecret" .Values.azureKeyVault.spSecret.secretKey }}
       {{- end }}
