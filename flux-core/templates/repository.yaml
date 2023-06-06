@@ -1,0 +1,19 @@
+{{- range $repo, $config := .Values.repositories }}
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: {{ $repo }}
+  namespace: {{ default $.Release.Namespace $.Values.fluxNamespace }}
+spec:
+  type: {{ default "" $config.type }}
+  interval: {{ default "5m" $config.interval }}
+  url: {{ required "Please provide a URL for the repository" $config.url }}
+  {{- if eq $config.type "git" }}
+  ref:
+    branch: {{ default "main" $config.gitBranch }}
+  {{- end }}
+  {{- with $config.repoAccessSecret }}
+  secretRef:
+    name: {{ . }}
+  {{- end }}
+{{- end }}

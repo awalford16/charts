@@ -1,0 +1,12 @@
+repositories:
+  {}
+  # my-repo:
+  #   url: https://github.com/hello
+
+apps:
+  {}
+  # my-app:
+  #   type: GitRepository
+  #   repo: my-repo
+  #   valuesInline:
+  #     replicas: 2
