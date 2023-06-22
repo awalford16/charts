@@ -18,6 +18,10 @@ spec:
         name: {{ required "Please provide name of the repository" $config.repo }}
         namespace: {{ default $.Release.Namespace $config.namespace }}
       interval: {{ default "5m" $config.interval }}
+      {{- with $config.valuesFrom }}
+      valuesFrom:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
   {{- with $config.valuesInline }}
   values:
     {{ toYaml . | nindent 4 }}
