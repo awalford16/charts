@@ -20,7 +20,7 @@ spec:
       interval: {{ default "5m" $config.interval }}
   {{- with $config.valuesFrom }}
   valuesFrom:
-    {{- toYaml . | nindent 8 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with $config.valuesInline }}
   values:
