@@ -1,7 +1,7 @@
 {{- range $repo, $config := .Values.repositories }}
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: HelmRepository
+kind: {{ default "HelmRepository" $config.type }}
 metadata:
   name: {{ $repo }}
   namespace: {{ default $.Release.Namespace $.Values.fluxNamespace }}

@@ -1,4 +1,5 @@
 {{- range $app, $config := .Values.apps }}
+{{- $type := (default $.Values.defaultRepoType $config.type) }}
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -10,11 +11,11 @@ spec:
   chart:
     spec:
       chart: {{ $app }}
-      {{- if eq $config.type "HelmRepository" }}
+      {{- if eq $type "HelmRepository" }}
       version: {{ required "Please provide a version for the helm chart" $config.version }}
       {{- end }}
       sourceRef:
-        kind: {{ default "HelmRepository" $config.type }}
+        kind: {{ $type }}
         name: {{ required "Please provide name of the repository" $config.repo }}
         namespace: {{ default $.Release.Namespace $config.namespace }}
       interval: {{ default "5m" $config.interval }}

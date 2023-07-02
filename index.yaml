@@ -8,8 +8,8 @@ entries:
     name: flux-core
     type: application
     urls:
-    - flux-core/flux-core-0.0.1.tgz
-    version: 0.0.1
+    - flux-core/flux-core-0.0.2.tgz
+    version: 0.0.2
   secret-manager:
   - apiVersion: v2
     created: "2023-06-08T21:26:30.353026+01:00"

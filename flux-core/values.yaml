@@ -9,3 +9,6 @@ apps: {}
   #   repo: my-repo
   #   valuesInline:
   #     replicas: 2
+
+
+defaultRepoType: HelmRepository
