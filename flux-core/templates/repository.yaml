@@ -12,9 +12,9 @@ spec:
   {{- end }}
   interval: {{ default "5m" $config.interval }}
   url: {{ required "Please provide a URL for the repository" $config.url }}
-  {{- if eq $config.type "git" }}
+  {{- if or (eq $config.type "git") (eq $kind "GitRepository") }}
   ref:
-    branch: {{ default "main" $config.gitBranch }}
+    branch: {{ default "main" $config.branch }}
   {{- end }}
   {{- with $config.repoAccessSecret }}
   secretRef:
