@@ -1,12 +1,15 @@
 {{- range $repo, $config := .Values.repositories }}
+{{- $kind := (default "HelmRepository" $config.kind) }}
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: {{ default "HelmRepository" $config.type }}
+kind: {{ $kind }}
 metadata:
   name: {{ $repo }}
   namespace: {{ default $.Release.Namespace $.Values.fluxNamespace }}
 spec:
+  {{- if eq "HelmRepository" $kind }}
   type: {{ default "" $config.type }}
+  {{- end }}
   interval: {{ default "5m" $config.interval }}
   url: {{ required "Please provide a URL for the repository" $config.url }}
   {{- if eq $config.type "git" }}

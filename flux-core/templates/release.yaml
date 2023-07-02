@@ -10,7 +10,7 @@ spec:
   interval: {{ default "5m" $config.interval }}
   chart:
     spec:
-      chart: {{ $app }}
+      chart: {{ default $app $config.path }}
       {{- if eq $type "HelmRepository" }}
       version: {{ required "Please provide a version for the helm chart" $config.version }}
       {{- end }}
