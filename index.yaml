@@ -2,27 +2,45 @@ apiVersion: v1
 entries:
   flux-core:
   - apiVersion: v2
-    created: "2023-06-08T21:26:30.348842+01:00"
+    created: "2023-07-07T08:51:21.839288+01:00"
     description: Create Flux releases
-    digest: 71ea8dadcc58f46cb3dee4fdb0c5eefcd5dc437591fab42b37577a0ad467fbf9
+    digest: b57ef962d90554b1df5ee9c50f23477efc71f227b3bb248cfe8756a554de4859
+    name: flux-core
+    type: application
+    urls:
+    - flux-core/flux-core-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    created: "2023-07-07T08:51:21.838401+01:00"
+    description: Create Flux releases
+    digest: a591595e37c9606fe2a8cb0b54e13a255cec4a1b001848d9381cc24303cf144c
     name: flux-core
     type: application
     urls:
     - flux-core/flux-core-0.0.2.tgz
     version: 0.0.2
+  - apiVersion: v2
+    created: "2023-07-07T08:51:21.83774+01:00"
+    description: Create Flux releases
+    digest: a202baf09aae5e76a062e55947a4aa8f5b7ceebc57753058c8eb42bbb7f12ed9
+    name: flux-core
+    type: application
+    urls:
+    - flux-core/flux-core-0.0.1.tgz
+    version: 0.0.1
   secret-manager:
   - apiVersion: v2
-    created: "2023-06-08T21:26:30.353026+01:00"
+    created: "2023-07-07T08:51:21.84475+01:00"
     dependencies:
     - condition: installDependencies
       name: external-secrets
       repository: https://charts.external-secrets.io
       version: 0.8.1
     description: A Helm chart to deploy ExternalSecrets + resources
-    digest: 5d8532658ca172f20d0eeee439479f9c8b13d2540accafcba3a0e7d9b2a6f01f
+    digest: f760758f4e7ff289433256cd12ea4633ac9e0c8a788e5ea4fb35813f3091fdff
     name: secret-manager
     type: application
     urls:
     - secret-manager/secret-manager-0.0.1.tgz
     version: 0.0.1
-generated: "2023-06-08T21:26:30.348328+01:00"
+generated: "2023-07-07T08:51:21.836715+01:00"
