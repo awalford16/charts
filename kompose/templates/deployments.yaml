@@ -1,3 +1,61 @@
 {{- range $service, $config := .Values.services }}
-
+{{- $labels := (default (dict) $config.labels) }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $service }}
+  labels:
+    {{- include "kompose.labels" $ | nindent 4 }}
+spec:
+  replicas: default "1" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.replicas")) 
+  selector:
+    matchLabels:
+      {{- include "kompose.selectorLabels" $ | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kompose.selectorLabels" $ | nindent 8 }}
+    spec:
+      imagePullSecrets: 
+        {{- include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.image-pull-secrets") }}
+      containers:
+        - name: {{ $service }}
+          image: {{ required "Please specify an image" $config.image }}
+          imagePullPolicy: {{ default "IfNotExists" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.image-pull-policy")) }}
+          {{- range $port := $config.ports }}
+          ports:
+            - name: {{ (split ":" $port)._0 | quote }}
+              containerPort: {{ (split ":" $port)._0 }}
+              protocol: TCP
+          {{- end }}
+          {{- with $config.environment }}
+          env:
+          {{- range $key, $value := . }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml $.Values.resources | nindent 12 }}
+      {{- with $.Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 {{- end }}
