@@ -1,0 +1,23 @@
+{{- range $service, $config := .Values.services }}
+{{- if $config.ports }}
+{{- $labels := (default (dict) $config.labels) }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $service }}
+  labels:
+    {{- include "kompose.labels" $ | nindent 4 }}
+spec:
+  type: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.type") }}
+  ports:
+  {{- range $port := $config.ports }}
+    - port: {{ (split ":" $port)._1 }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  {{- end }}
+  selector:
+    {{- include "kompose.selectorLabels" $ | nindent 4 }}
+{{- end }}
+{{- end }}
