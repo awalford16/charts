@@ -48,9 +48,9 @@ spec:
           {{- end }}
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
-      {{- with $.Values.nodeSelector }}
+      {{- with (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.nodeSelectors")) }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
+      {{- include "kompose.keyValue" . | nindent 8 }}
       {{- end }}
       {{- with (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.tolerations")) }}
       tolerations:

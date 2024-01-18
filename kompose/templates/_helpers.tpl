@@ -87,3 +87,9 @@ Usage:
   value: "{{ $value }}"
   effect: "{{ $taint._1 }}"
 {{- end }}
+
+{{- define "kompose.keyValue" -}}
+{{- range $i, $dict := (split ";" .) }}
+{{- toYaml (dict (split "=" $dict)._0 (split "=" $dict)._1) }}
+{{- end }}
+{{- end }}
