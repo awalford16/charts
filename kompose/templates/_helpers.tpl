@@ -62,7 +62,28 @@ Create the name of the service account to use
 {{- end }}
 
 {{- define "kompose.komposeLabel" -}}
-{{- if has .key (keys .labels) }}
-{{- index .labels (.key | quote) }}
+{{- with (index .labels .key) -}}
+{{ . }}
 {{- end }}
+{{- end }}
+
+{{- define "kompose.podGroups" -}}
+{{- range $service := .Values.services }}
+{{- list "value1" "value2" "value3" -}}
+{{- end }}
+{{- end }}
+
+{{/*
+Convert a taint string into a list of tolerations suitable for a Kubernetes deployment
+Usage:
+  {{ include "kompose.taintToTolerations" "sku=gpu:NoSchedule" | toYaml | indent 2 }}
+*/}}
+{{- define "kompose.taintToTolerations" -}}
+{{- $taint := (split ":" .) }}
+{{- $key := (split "=" $taint._0)._0 }}
+{{- $value := (split "=" $taint._0)._1 -}}
+- key: "{{ $key }}"
+  operator: "Equal"
+  value: "{{ $value }}"
+  effect: "{{ $taint._1 }}"
 {{- end }}

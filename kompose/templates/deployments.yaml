@@ -8,7 +8,7 @@ metadata:
   labels:
     {{- include "kompose.labels" $ | nindent 4 }}
 spec:
-  replicas: default "1" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.replicas")) 
+  replicas: {{ default "1" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.replicas")) }}
   selector:
     matchLabels:
       {{- include "kompose.selectorLabels" $ | nindent 6 }}
@@ -38,24 +38,24 @@ spec:
           {{- end }}
           livenessProbe:
             httpGet:
-              path: /
-              port: http
+              path: {{ default "/" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.liveliness.http_get_path")) }}
+              port: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.liveliness.http_get_path") }}
+          {{- if (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.readiness.disable")) }}
           readinessProbe:
             httpGet:
-              path: /
-              port: http
+              path: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.readiness.http_get_path") }}
+              port: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.readiness.http_get_port") }}
+          {{- end }}
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
       {{- with $.Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with $.Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with $.Values.tolerations }}
+      {{- with (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.tolerations")) }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
+      {{- range $i, $toleration := (split ";" .) }}
+      {{- include "kompose.taintToTolerations" $toleration | nindent 8 }}
+      {{- end }}
       {{- end }}
 {{- end }}
