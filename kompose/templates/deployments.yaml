@@ -1,4 +1,6 @@
-{{- range $service, $config := .Values.services }}
+{{- $services := (include "kompose.podGroups" . | fromJson) }}
+{{- range $service, $containers := $services }}
+{{- $config := (index $.Values.services (split ";" $containers)._0) }}
 {{- $labels := (default (dict) $config.labels) }}
 ---
 apiVersion: apps/v1
@@ -20,7 +22,9 @@ spec:
       imagePullSecrets: 
         {{- include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.image-pull-secrets") }}
       containers:
-        - name: {{ $service }}
+        {{- range $container := (split ";" $containers) }}
+        {{- $config := (index $.Values.services $container) }}
+        - name: {{ $container }}
           image: {{ required "Please specify an image" $config.image }}
           imagePullPolicy: {{ default "IfNotExists" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.image-pull-policy")) }}
           {{- range $port := $config.ports }}
@@ -48,6 +52,7 @@ spec:
           {{- end }}
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
+          {{- end }}
       {{- with (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.nodeSelectors")) }}
       nodeSelector:
       {{- include "kompose.keyValue" . | nindent 8 }}

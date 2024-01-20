@@ -67,10 +67,29 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{/*
+Build a list of services which accounts for service grouping label
+---
+service1:
+  lables:
+    kompose.service.group: hello
+service2:
+  labels:
+    kompose.service.group: hello
+service3: {}
+---
+# deployment: [containers]
+hello: service1;service2
+service3: service3
+*/}}
 {{- define "kompose.podGroups" -}}
-{{- range $service := .Values.services }}
-{{- list "value1" "value2" "value3" -}}
+{{- $services := dict }}
+{{- range $service, $config := .Values.services }}
+  {{- $groupLabel := index (default (dict) $config.labels) "kompose.service.group" | default $service }}
+  {{- $existing := index $services $groupLabel | default "" }}
+  {{- $_ := set $services $groupLabel (cat $existing $service | trim | replace " " ";") }}
 {{- end }}
+{{- $services | toJson -}}
 {{- end }}
 
 {{/*
