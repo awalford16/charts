@@ -1,0 +1,22 @@
+services: {}
+  # test:
+  #   image: hello:123
+  #   labels:
+  #     kompose.tolerations: sku=gpu:NoSchedule;key=value:NoSchedule
+  #     kompose.nodeSelectors: test=hello
+  #     kompose.replicas: 1
+  #     kompose.service.group: hello
+  #   ports: 
+  #     - 8080:8080
+  # test2:
+  #   image: hello:321
+  #   labels:
+  #     kompose.tolerations: sku=gpu:NoSchedule;key=value:NoSchedule
+  #     kompose.nodeSelectors: test=hello
+  #     kompose.replicas: 1
+  #     kompose.service.group: hello
+  #   ports: 
+  #     - 8181:8181
+  # another:
+  #   image: test:123
+

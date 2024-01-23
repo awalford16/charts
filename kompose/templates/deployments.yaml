@@ -1,0 +1,66 @@
+{{- $services := (include "kompose.podGroups" . | fromJson) }}
+{{- range $service, $containers := $services }}
+{{- $config := (index $.Values.services (split ";" $containers)._0) }}
+{{- $labels := (default (dict) $config.labels) }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $service }}
+  labels:
+    {{- include "kompose.labels" $ | nindent 4 }}
+spec:
+  replicas: {{ default "1" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.replicas")) }}
+  selector:
+    matchLabels:
+      {{- include "kompose.selectorLabels" $ | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kompose.selectorLabels" $ | nindent 8 }}
+    spec:
+      imagePullSecrets: 
+        {{- include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.image-pull-secrets") }}
+      containers:
+        {{- range $container := (split ";" $containers) }}
+        {{- $config := (index $.Values.services $container) }}
+        - name: {{ $container }}
+          image: {{ required "Please specify an image" $config.image }}
+          imagePullPolicy: {{ default "IfNotExists" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.image-pull-policy")) }}
+          {{- range $port := $config.ports }}
+          ports:
+            - name: {{ (split ":" $port)._0 | quote }}
+              containerPort: {{ (split ":" $port)._0 }}
+              protocol: TCP
+          {{- end }}
+          {{- with $config.environment }}
+          env:
+          {{- range $key, $value := . }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: {{ default "/" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.liveliness.http_get_path")) }}
+              port: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.liveliness.http_get_path") }}
+          {{- if (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.readiness.disable")) }}
+          readinessProbe:
+            httpGet:
+              path: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.readiness.http_get_path") }}
+              port: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.readiness.http_get_port") }}
+          {{- end }}
+          resources:
+            {{- toYaml $.Values.resources | nindent 12 }}
+          {{- end }}
+      {{- with (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.nodeSelectors")) }}
+      nodeSelector:
+      {{- include "kompose.keyValue" . | nindent 8 }}
+      {{- end }}
+      {{- with (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.tolerations")) }}
+      tolerations:
+      {{- range $i, $toleration := (split ";" .) }}
+      {{- include "kompose.taintToTolerations" $toleration | nindent 8 }}
+      {{- end }}
+      {{- end }}
+{{- end }}

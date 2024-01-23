@@ -1,0 +1,4 @@
+name: kompose
+apiVersion: v2
+description: A helm chart that deploys docker-compose files to clusters
+version : 0.1.0
