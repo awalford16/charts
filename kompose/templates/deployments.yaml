@@ -42,6 +42,11 @@ spec:
                 secretKeyRef:
                   key: {{ (split "/" $value)._3 }}
                   name: {{ (split "/" $value)._3 }}
+            {{- else if (regexMatch "^\\/.*" $value) }}
+              valueFrom:
+                configMapKeyRef:
+                  key: {{ (split "/" $value)._1 }}
+                  name: {{ (split "/" $value)._1 }}
             {{- else }}
               value: {{ $value | quote }}
             {{- end }}
@@ -56,6 +61,10 @@ spec:
             httpGet:
               path: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.readiness.http_get_path") }}
               port: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.readiness.http_get_port") }}
+          {{- end }}
+          {{- with $config.deploy }}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
           {{- end }}
         {{- end }}
       {{- with (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.nodeSelectors")) }}
