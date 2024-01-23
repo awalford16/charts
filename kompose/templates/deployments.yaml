@@ -37,7 +37,14 @@ spec:
           env:
           {{- range $key, $value := . }}
             - name: {{ $key }}
+            {{- if (regexMatch "^\\/run\\/secrets\\/.*" $value) }}
+              valueFrom:
+                secretKeyRef:
+                  key: {{ (split "/" $value)._3 }}
+                  name: {{ (split "/" $value)._3 }}
+            {{- else }}
               value: {{ $value | quote }}
+            {{- end }}
           {{- end }}
           {{- end }}
           livenessProbe:
@@ -50,9 +57,7 @@ spec:
               path: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.readiness.http_get_path") }}
               port: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.readiness.http_get_port") }}
           {{- end }}
-          resources:
-            {{- toYaml $.Values.resources | nindent 12 }}
-          {{- end }}
+        {{- end }}
       {{- with (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.nodeSelectors")) }}
       nodeSelector:
       {{- include "kompose.keyValue" . | nindent 8 }}

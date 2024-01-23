@@ -1,4 +1,4 @@
-services: {}
+services:
   # test:
   #   image: hello:123
   #   labels:
@@ -17,6 +17,13 @@ services: {}
   #     kompose.service.group: hello
   #   ports: 
   #     - 8181:8181
-  # another:
-  #   image: test:123
+  another:
+    image: test:123
+    environment:
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/my_secret
+    secrets:
+      - my_secret
 
+secrets:
+  my_secret:
+    file: /tmp/hello.txt

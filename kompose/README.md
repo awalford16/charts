@@ -21,3 +21,30 @@ Node Selectors for a deployment can be added with the label `kompose.nodeSelecto
 Multiple images can be deployed under a single deployment using the `kompose.service.group` label. Setting the group name the same for different images will create multiple containers for them under the same deployment.
 
 ### Secrets
+
+The chart supports external secrets and secrets from a file much like docker-compose. When `external` is set to true it will create and [ExternalSecret](https://external-secrets.io/v0.4.4/api-externalsecret/) resource. The `name` key references the secret store to use for external-secrets.
+
+```yaml
+services:
+    test:
+        environment:
+            HELLO: /run/secrets/my_secret
+
+secrets:
+    my_secret:
+        # This will create an external secret
+        external: true
+        name: my-secret-store
+    my_other_secret:
+        file: test.txt
+```
+
+Secrets will be mapped into environment variables if the value of the env var starts with `/run/secrets/`.
+
+Currently the secrets only support 1 key each with the key being the same name as the secret.
+
+Secret values from `file` are also supported but the file is required to live within the helm chart.
+
+### Configs
+
+### Volumes
