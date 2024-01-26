@@ -6,6 +6,9 @@ services: {}
   #     kompose.nodeSelectors: test=hello
   #     kompose.replicas: 1
   #     kompose.service.group: hello
+  #   environment:
+  #     WORDPRESS_DB_PASSWORD_FILE: /run/secrets/test
+  #     WORDPRESS_DB_PASSWORD_CONFIG: /test
   #   ports: 
   #     - 8080:8080
   # test2:
@@ -20,10 +23,18 @@ services: {}
   # another:
   #   image: test:123
   #   environment:
-  #     WORDPRESS_DB_PASSWORD_FILE: /run/secrets/my_secret
-  #   secrets:
-  #     - my_secret
+  #     WORDPRESS_DB_PASSWORD_FILE: /test
+  #   configs:
+  #     - test
 
 # secrets:
 #   my_secret:
 #     file: /tmp/hello.txt
+
+config: {}
+  # test:
+  #   content: ""
+
+# x-externalSecrets:
+  # secretStoreName: 
+  # secretStoreKind:
