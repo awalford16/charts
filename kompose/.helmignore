@@ -21,3 +21,6 @@
 .idea/
 *.tmproj
 .vscode/
+
+# Ignore existing chart zips
+kompose-*.tgz
