@@ -1,4 +1,4 @@
-services:
+services: {}
   # test:
   #   image: hello:123
   #   labels:
@@ -17,10 +17,12 @@ services:
   #     kompose.service.group: hello
   #   ports: 
   #     - 8181:8181
-  another:
-    image: test:123
-    environment:
-      WORDPRESS_DB_PASSWORD_FILE: /test
+  # another:
+  #   image: test:123
+  #   environment:
+  #     WORDPRESS_DB_PASSWORD_FILE: /test
+  #   configs:
+  #     - test
 
 # secrets:
 #   my_secret:
@@ -28,8 +30,7 @@ services:
 
 # config:
 #   test:
-#     content: |
-#       hello
+#     content: ""
 
 # x-externalSecrets:
   # secretStoreName: 

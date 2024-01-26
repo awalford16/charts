@@ -42,7 +42,7 @@ spec:
                 secretKeyRef:
                   key: {{ (split "/" $value)._3 }}
                   name: {{ (split "/" $value)._3 }}
-            {{- else if (regexMatch "^\\/.*" $value) }}
+            {{- else if (and (regexMatch "^\\/.*" $value) (index $.Values.config (split "/" $value)._1)) }}
               valueFrom:
                 configMapKeyRef:
                   key: {{ (split "/" $value)._1 }}
@@ -66,6 +66,11 @@ spec:
           resources:
             {{- toYaml .resources | nindent 12 }}
           {{- end }}
+          volumeMounts:
+          {{- range $cmv := $config.configs }}
+            - name: {{ $cmv }}
+              mountPath: {{ printf "/%s" $cmv }}
+          {{- end }}
         {{- end }}
       {{- with (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.nodeSelectors")) }}
       nodeSelector:
@@ -76,5 +81,11 @@ spec:
       {{- range $i, $toleration := (split ";" .) }}
       {{- include "kompose.taintToTolerations" $toleration | nindent 8 }}
       {{- end }}
+      {{- end }}
+      volumes:
+      {{- range $cm := $config.configs }}
+        - name: {{ $cm }}
+          configMap:
+            name: {{ $cm }}
       {{- end }}
 {{- end }}

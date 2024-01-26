@@ -22,7 +22,7 @@ Multiple images can be deployed under a single deployment using the `kompose.ser
 
 ### Secrets
 
-The chart supports external secrets and secrets from a file much like docker-compose. When `external` is set to true it will create and [ExternalSecret](https://external-secrets.io/v0.4.4/api-externalsecret/) resource. The `name` key references the secret store to use for external-secrets.
+The chart supports external secrets and secrets from a file much like docker-compose. When `external` is set to true it will create and [ExternalSecret](https://external-secrets.io/v0.4.4/api-externalsecret/) resource. The `name` key references the secret key within the remote secret store.
 
 ```yaml
 services:
@@ -34,9 +34,17 @@ secrets:
     my_secret:
         # This will create an external secret
         external: true
-        name: my-secret-store
+        name: secret-key
     my_other_secret:
         file: test.txt
+```
+
+Additional ExternalSecret configuration can be managed with the `x-externalSecrets` block in the compose values:
+
+```yaml
+x-externalSecrets:
+  secretStoreName: my-secret-store
+  secretStoreKind: ClusterSecretStore
 ```
 
 Secrets will be mapped into environment variables if the value of the env var starts with `/run/secrets/`.
@@ -46,5 +54,45 @@ Currently the secrets only support 1 key each with the key being the same name a
 Secret values from `file` are also supported but the file is required to live within the helm chart.
 
 ### Configs
+
+Defining a `config` block will create ConfigMap resources. Currently it just supports the `content` key with the CM data passed in directly.
+
+```yaml
+config:
+    my_config:
+        content: |
+            hello
+```
+
+If `configs` is added to a service then it will mount in that ConfigMap as a volume at `/CONFIGMAP_NAME`
+
+```yaml
+services:
+    app:
+        configs:
+            - my_config
+```
+
+Additionally, they can be consumed as environment variables, similar to secrets by specifying the path `/CONFIGMAP_NAME`. This is where docker-compose will store config data on a build. The chart will check to see that the CM exists and will spit out the relevant template:
+
+```yaml
+services:
+    app:
+        environment:
+            MY_CONFIG: /my-config # Config map does not exist, will render as this path specifically
+```
+
+```yaml
+services:
+    app:
+        environment:
+            MY_CONFIG: /my-config # Config map exists so will read in CM value into env var
+
+config:
+    my-config:
+        content: |
+            hello
+```
+
 
 ### Volumes
