@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   flux-core:
   - apiVersion: v2
-    created: "2024-01-26T21:48:01.553154Z"
+    created: "2024-01-27T10:03:39.106518Z"
     description: Create Flux releases
     digest: b57ef962d90554b1df5ee9c50f23477efc71f227b3bb248cfe8756a554de4859
     name: flux-core
@@ -11,7 +11,7 @@ entries:
     - flux-core/flux-core-0.0.3.tgz
     version: 0.0.3
   - apiVersion: v2
-    created: "2024-01-26T21:48:01.552369Z"
+    created: "2024-01-27T10:03:39.10547Z"
     description: Create Flux releases
     digest: a591595e37c9606fe2a8cb0b54e13a255cec4a1b001848d9381cc24303cf144c
     name: flux-core
@@ -20,7 +20,7 @@ entries:
     - flux-core/flux-core-0.0.2.tgz
     version: 0.0.2
   - apiVersion: v2
-    created: "2024-01-26T21:48:01.551753Z"
+    created: "2024-01-27T10:03:39.104719Z"
     description: Create Flux releases
     digest: a202baf09aae5e76a062e55947a4aa8f5b7ceebc57753058c8eb42bbb7f12ed9
     name: flux-core
@@ -30,7 +30,15 @@ entries:
     version: 0.0.1
   kompose:
   - apiVersion: v2
-    created: "2024-01-26T21:48:01.553655Z"
+    created: "2024-01-27T10:03:39.107525Z"
+    description: A helm chart that deploys docker-compose files to clusters
+    digest: 3f244fe83c8fa1db928e4e64555f8cbf54200bbb97e32d1592c8705ab2ac8729
+    name: kompose
+    urls:
+    - kompose/kompose-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    created: "2024-01-27T10:03:39.107345Z"
     description: A helm chart that deploys docker-compose files to clusters
     digest: 0d047a408bc504d8b7adb6b70b319c2064fd42a4e6a6a1c01048d5de7111d792
     name: kompose
@@ -38,7 +46,7 @@ entries:
     - kompose/kompose-0.2.0.tgz
     version: 0.2.0
   - apiVersion: v2
-    created: "2024-01-26T21:48:01.553483Z"
+    created: "2024-01-27T10:03:39.107156Z"
     description: A helm chart that deploys docker-compose files to clusters
     digest: 5806feabcf14027fad853e99f27cbd5b3d143c7a7e9dbef82f3a27f1d9abd525
     name: kompose
@@ -46,7 +54,7 @@ entries:
     - kompose/kompose-0.1.1.tgz
     version: 0.1.1
   - apiVersion: v2
-    created: "2024-01-26T21:48:01.553292Z"
+    created: "2024-01-27T10:03:39.106795Z"
     description: A helm chart that deploys docker-compose files to clusters
     digest: 7a9d99949c95b818992c0138fdcf306b520f06a0417d0326fcd8d8c9f492f2b3
     name: kompose
@@ -55,7 +63,7 @@ entries:
     version: 0.1.0
   secret-manager:
   - apiVersion: v2
-    created: "2024-01-26T21:48:01.557432Z"
+    created: "2024-01-27T10:03:39.112027Z"
     dependencies:
     - condition: installDependencies
       name: external-secrets
@@ -68,4 +76,4 @@ entries:
     urls:
     - secret-manager/secret-manager-0.0.1.tgz
     version: 0.0.1
-generated: "2024-01-26T21:48:01.551182Z"
+generated: "2024-01-27T10:03:39.103756Z"

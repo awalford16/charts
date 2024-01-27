@@ -112,3 +112,9 @@ Usage:
 {{- toYaml (dict (split "=" $dict)._0 (split "=" $dict)._1) }}
 {{- end }}
 {{- end }}
+
+{{- define "kompose.listToDict" -}}
+{{- range $dict := . }}
+{{- toYaml (dict (split "=" $dict)._0 (split "=" $dict)._1) }}
+{{- end }}
+{{- end }}

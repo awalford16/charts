@@ -96,3 +96,19 @@ config:
 
 
 ### Volumes
+
+The chart supports custom volume types via the use of volume labels. The name of the volume is the key, and the `name` field under the volume refers to the type of volume to use (May be a bit confusing but it allows for multiple custom volume types).
+
+```yaml
+volumes:
+    my-volume:
+        name: persistentVolumeClaim
+        labels:
+            - claimName=my-claim
+    my-fileshare:
+        name: azureFileShare
+        labels:
+            - secretName=azure-service-principal
+```
+
+The labels refer to the relevant keys for that specific volume type.

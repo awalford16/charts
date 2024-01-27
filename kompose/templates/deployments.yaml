@@ -71,6 +71,10 @@ spec:
             - name: {{ $cmv }}
               mountPath: {{ printf "/%s" $cmv }}
           {{- end }}
+          {{- range $vol := $config.volumes }}
+            - name: {{ (split ":" $vol)._0 }}
+              mountPath: {{ (split ":" $vol)._1 }}
+          {{- end }}
         {{- end }}
       {{- with (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.nodeSelectors")) }}
       nodeSelector:
@@ -87,5 +91,10 @@ spec:
         - name: {{ $cm }}
           configMap:
             name: {{ $cm }}
+      {{- end }}
+      {{- range $vol, $data := $.Values.volumes }}
+        - name: {{ $vol }}
+          {{- printf "%s:" $data.name | nindent 10 }}
+          {{- (include "kompose.listToDict" $data.labels) | nindent 12 }}
       {{- end }}
 {{- end }}
