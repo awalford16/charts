@@ -55,7 +55,7 @@ spec:
           livenessProbe:
             httpGet:
               path: {{ default "/" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.liveliness.http_get_path")) }}
-              port: {{ include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.liveliness.http_get_path") }}
+              port: {{ default "80" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.liveliness.http_get_path")) }}
           {{- if (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.service.healthcheck.readiness.disable")) }}
           readinessProbe:
             httpGet:
