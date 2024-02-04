@@ -18,6 +18,6 @@ spec:
       name: http
   {{- end }}
   selector:
-    {{- include "kompose.selectorLabels" $ | nindent 4 }}
+    {{- include "kompose.selectorLabels" (merge $ (dict "component" $service)) | nindent 4 }}
 {{- end }}
 {{- end }}

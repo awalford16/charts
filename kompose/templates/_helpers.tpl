@@ -48,6 +48,9 @@ Selector labels
 {{- define "kompose.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "kompose.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- with .component }}
+kompose.io/component: {{ . }}
+{{- end }}
 {{- end }}
 
 {{/*

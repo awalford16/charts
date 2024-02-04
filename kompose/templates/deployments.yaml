@@ -13,11 +13,11 @@ spec:
   replicas: {{ default "1" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.replicas")) }}
   selector:
     matchLabels:
-      {{- include "kompose.selectorLabels" $ | nindent 6 }}
+      {{- include "kompose.selectorLabels" (merge $ (dict "component" $service)) | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "kompose.selectorLabels" $ | nindent 8 }}
+        {{- include "kompose.selectorLabels" (merge $ (dict "component" $service)) | nindent 8 }}
     spec:
       imagePullSecrets: 
         {{- include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.image-pull-secrets") }}
@@ -26,7 +26,7 @@ spec:
         {{- $config := (index $.Values.services $container) }}
         - name: {{ $container }}
           image: {{ required "Please specify an image" $config.image }}
-          imagePullPolicy: {{ default "IfNotExists" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.image-pull-policy")) }}
+          imagePullPolicy: {{ default "IfNotPresent" (include "kompose.komposeLabel" (dict "labels" $labels "key" "kompose.image-pull-policy")) }}
           {{- range $port := $config.ports }}
           ports:
             - name: {{ (split ":" $port)._0 | quote }}

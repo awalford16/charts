@@ -1,4 +1,4 @@
-services: {}
+services:
   # test:
   #   image: hello:123
   #   labels:
@@ -39,6 +39,7 @@ config: {}
 
 volumes: {}
   # test:
+  #   # name refers to the type of volume mount
   #   name: persistentVolumeClaim
   #   labels:
   #     - "claimName=hello"
