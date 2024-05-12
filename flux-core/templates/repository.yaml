@@ -5,7 +5,6 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: {{ $kind }}
 metadata:
   name: {{ $repo }}
-  namespace: {{ default $.Release.Namespace $config.namespace }}
 spec:
   {{- if eq "HelmRepository" $kind }}
   type: {{ default "" $config.type }}
