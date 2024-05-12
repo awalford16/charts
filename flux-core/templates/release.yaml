@@ -8,10 +8,10 @@ metadata:
   namespace: {{ default $.Release.Namespace $config.namespace }}
 spec:
   interval: {{ default "5m" $config.interval }}
+  install:
+    createNamespace: true
   chart:
     spec:
-      install:
-        createNamespace: true
       chart: {{ default $app $config.path }}
       {{- if eq $type "HelmRepository" }}
       version: {{ required "Please provide a version for the helm chart" $config.version }}
