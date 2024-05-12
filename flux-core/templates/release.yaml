@@ -5,11 +5,11 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: {{ $app }}
-  namespace: {{ default $.Release.Namespace $config.namespace }}
 spec:
   interval: {{ default "5m" $config.interval }}
   install:
     createNamespace: true
+  targetNamespace: {{ default $.Release.Namespace $config.namespace }}
   chart:
     spec:
       chart: {{ default $app $config.path }}
