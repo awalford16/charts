@@ -19,7 +19,6 @@ spec:
       sourceRef:
         kind: {{ $type }}
         name: {{ required "Please provide name of the repository" $config.repo }}
-        namespace: {{ default $.Release.Namespace $config.namespace }}
       interval: {{ default "5m" $config.interval }}
   {{- with $config.valuesFrom }}
   valuesFrom:
