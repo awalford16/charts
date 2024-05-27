@@ -1,8 +1,10 @@
+# -- Dictionary of different repositories and their type
 repositories:
   # my-repo:
   #   kind: GitRepository
   #   url: https://github.com/hello
 
+# -- Define a block of apps for each HelmRelease
 apps: {}
   # my-app:
   #   type: GitRepository
@@ -11,4 +13,5 @@ apps: {}
   #     replicas: 2
 
 
+# -- What to use as the default repository type
 defaultRepoType: HelmRepository

@@ -6,11 +6,13 @@ vault:
 
   secrets: {}
 
+# -- Configuration for AzureKeyVault
 azureKeyVault:
   enabled: true
   name: mykeyvault
   authType: ServicePrincipal  # ManagedIdentity or ServicePrincipal
 
+  # -- Service Principal credentials to use
   spSecret:
     create: true  # Create secret that stores Service Principal details
     
@@ -20,12 +22,16 @@ azureKeyVault:
 
   secrets: {}
 
-# Whether to install ExternalSecrets onto the cluster 
+# -- Whether to install ExternalSecrets onto the cluster 
 installDependencies: false
 
+# -- SecretStore or ClusterSecretStore
 secretStoreType: ClusterSecretStore  # SecretStore or ClusterSecretStore
+
+# -- How frequently to refresh secrets
 secretRefreshInterval: 1h
 
+# -- Configuration for ExternalSecrets dependency
 external-secrets:
   # Recommended to install CRDs separately from https://raw.githubusercontent.com/external-secrets/external-secrets/main/deploy/crds/bundle.yaml
   installCRDs: false
