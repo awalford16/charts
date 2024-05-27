@@ -2,6 +2,8 @@ vault:
   enabled: false
   engine: dev
   version: v1
+
+  # -- Whether to create a secret to store the Vault token or read from an existing one
   createTokenSecret: true  # Create secret to store vault token information
 
   secrets: {}
@@ -20,6 +22,7 @@ azureKeyVault:
     # usernameKey: ClientID
     # secretKey: ClientSecret
 
+  # -- ES secrets to generate
   secrets: {}
 
 # -- Whether to install ExternalSecrets onto the cluster 

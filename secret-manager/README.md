@@ -15,12 +15,13 @@ A Helm chart to deploy ExternalSecrets + resources
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | azureKeyVault | object | `{"authType":"ServicePrincipal","enabled":true,"name":"mykeyvault","secrets":{},"spSecret":{"create":true}}` | Configuration for AzureKeyVault |
+| azureKeyVault.secrets | object | `{}` | ES secrets to generate |
 | azureKeyVault.spSecret | object | `{"create":true}` | Service Principal credentials to use |
 | external-secrets | object | `{"installCRDs":false}` | Configuration for ExternalSecrets dependency |
 | installDependencies | bool | `false` | Whether to install ExternalSecrets onto the cluster  |
 | secretRefreshInterval | string | `"1h"` | How frequently to refresh secrets |
 | secretStoreType | string | `"ClusterSecretStore"` | SecretStore or ClusterSecretStore |
-| vault.createTokenSecret | bool | `true` |  |
+| vault.createTokenSecret | bool | `true` | Whether to create a secret to store the Vault token or read from an existing one |
 | vault.enabled | bool | `false` |  |
 | vault.engine | string | `"dev"` |  |
 | vault.secrets | object | `{}` |  |
