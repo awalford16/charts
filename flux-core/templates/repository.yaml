@@ -1,7 +1,7 @@
 {{- range $repo, $config := .Values.repositories }}
 {{- $kind := (default "HelmRepository" $config.kind) }}
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: {{ $kind }}
 metadata:
   name: {{ $repo }}
